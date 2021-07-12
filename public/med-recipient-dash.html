@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <title>med-recipient-dash</title>
+<style>
+  body {
+    background-image: linear-gradient(90deg, #feada6 10%, #f3e5e5 100%);
+  }
+</style>
+ <script>
+  $(document).ready(function () {
+    var url = "/recipient/getname?email=" + localStorage.getItem("email");
+    $.get(url, function (resp) {
+      if (resp.length == 0) {
+        alert("Something went wrong! Complete your profile.")
+      }
+      else {
+        $("#user").html(resp[0].name);
+      }
+    });
+   $("#detailbtn").click(function () {
+    window.location.href = "recipient-details.html";
+   });
+   $("#findbtn").click(function () {
+    window.location.href = "med-finder.html";
+   });
+   $("#logoutbtn").click(function () {
+      localStorage.removeItem("email");
+      window.location.href = "index.html";
+    });
+  });
+ </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+          width="30" height="24">
+        Medissist
+      </a>
+      <font style="font-weight: normal; font-size: medium; margin-left: -290px;">Recipient Dashboard</font>
+      <ul class="navbar-nav" style="margin-left: 750px;">
+        Welcome &nbsp; <span id="user">&nbsp;</span>
+      </ul>
+    </div>
+  </nav>
+  <div class="card-group" style="margin: 10px 350px 0px 350px;">
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="./pics/user.jfif" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+    <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="detailbtn">Recipient Details</button>
+  </div>
+ </div>
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="https://tse4.mm.bing.net/th?id=OIP.IKDqwH-lai8aE9IoRVbS5wHaHa&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+     <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="findbtn">Find Medicine</button>
+  </div>
+ </div>
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="./pics/userlogout.jpg" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+      <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="logoutbtn">Logout</button>
+  </div>
+ </div>
+</div>
+</body>
+
+</html>

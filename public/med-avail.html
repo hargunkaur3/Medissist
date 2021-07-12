@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <title>Document</title>
+<style>
+  body {
+    background-color: #f0e9fa;
+  }
+  #link{
+   text-decoration: none;
+  }
+  #mybutton{
+   color: azure;
+   background-color: darkslategray;
+   float: right;
+   height: 50px;
+   width: 170px;
+   border-radius: 30px;
+   padding: 10px 10px 10px 17px;
+  }
+  #mybutton:hover{
+   color: darkslategray;
+   background-color: azure;
+  }
+</style>
+ <script>
+  function loading(){
+    var em=localStorage.getItem("email");
+    document.getElementById("email").value=em;
+    var url = "/donor/check-donor?email=" + em;
+    $.post(url, function (resp) {
+      if (resp.length == 0) {
+        //alert("Avail med");
+      }
+      else {
+        //alert(JSON.stringify(resp));
+        $("#city").val(resp[0].city);
+      }
+    });
+    if(localStorage.getItem("rid")){
+      var url="/donor/getmed?rid="+ localStorage.getItem("rid");
+      $.get(url,function(resp){
+        if(resp.length==0){
+          alert("Something went wrong");
+        }
+        else{
+          //alert(JSON.stringify(resp));
+          $("#rid").val(localStorage.getItem("rid"));
+          $("#city").val(resp[0].city);
+          $("#medname").val(resp[0].medname);
+          $("#company").val(resp[0].company);
+          $("#expdate").val(resp[0].expdate.substring(0,10));
+          $("#unit").val(resp[0].unit);
+          $("#qty").val(resp[0].qty);
+          $("#picture").val(resp[0].picname);
+          $("#shw").attr("src","/uploads/"+resp[0].picname);
+        }
+      });
+    }
+  }
+  function resetme() {
+      alert("hi");
+      var em = localStorage.getItem("email");
+      document.getElementById("email").value = em;
+      var url = "/donor/check-donor?email=" + em;
+      $.post(url, function (resp) {
+        if (resp.length == 0) {
+          //alert("Avail med");
+        }
+        else {
+          //alert(JSON.stringify(resp));
+          $("#city").val(resp[0].city);
+        }
+      });
+      $("#medname").val(null);
+      $("#company").val(null);
+      $("#expdate").val(null);
+      $("#unit").val(null);
+      $("#qty").val(null);
+      $("#picture").val(null);
+      $("#rid").val(null);
+      $("#shw").attr("src", "");
+    }
+  function show(ref) {
+    document.getElementById("shw").src = URL.createObjectURL(ref.files[0]);
+   }
+ </script>
+</head>
+<body onload="loading();">
+  <a id="link" href="med-donor-dash.html">
+    <div id="mybutton">
+      Back to dashboard
+    </div>
+  </a>
+ <h1>Avail Medicine</h1><hr>
+ <form class="mx-5" method="POST" enctype="multipart/form-data">
+  <div class="row mb-3 g-3">
+   <label for="email" class="col-sm-2 col-form-label">Email</label>
+   <div class="col-sm-10">
+    <input readonly type="email" class="form-control" name="email" id="email">
+   </div>
+  </div>
+  <div class="row mb-3 g-3">
+    <label for="city" class="col-sm-2 col-form-label">City</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="city" id="city">
+    </div>
+  </div>
+  <div class="col-md-5 mx-4" >
+   <label for="medname" class="form-label">Medicine Name</label>
+   <input type="text" class="form-control" id="medname" name="medname">
+  </div>
+  <input type="text" hidden name="rid" id="rid">
+  <input type="text" hidden name="picture" id="picture">
+  <div class="col-md-5 mx-4" >
+   <label for="company" class="form-label">Company</label>
+   <input type="text" class="form-control" id="company" name="company">
+  </div>
+  <div class="col-md-5 mx-4" >
+   <label for="expdate" class="form-label">Expiry Date</label>
+   <input type="date" class="form-control" id="expdate" name="expdate">
+  </div>
+  <div class="col-md-5 mx-4" >
+   <label for="unit" class="form-label">Form of the medicine</label>
+   <select class="form-select" id="unit" name="unit" aria-label="Default select example">
+    <option value="none">Select</option>
+    <option value="tablet">Tablet</option>
+    <option value="capsule">Capsule</option>
+    <option value="liquid">Liquid</option>
+    <option value="powder">Powder</option>
+    <option value="tube">Tube</option>
+    <option value="spray">Spray</option>
+   </select>
+  </div>
+  <div class="col-md-5 mx-4">
+   <label for="qty" class="form-label">Quantity</label>
+   <input type="number" name="qty" class="form-control" id="qty">
+  </div>
+  <br>
+  <div class="row mb-3 g-3">
+   <label for="pic" class="col-sm-2 col-form-label">Picture of the medicine</label>
+   <div class="col-sm-3">
+    <input type="file" onchange="show(this)" name="pic" class="form-control" id="pic">
+   </div>
+  </div>
+  <div class="mb-3" style="margin-top: -400px; margin-left: 850px;">
+   <img class="mx-5" src="" alt="" height="380px" width="380px" id="shw">
+  </div>
+  <center><button type="submit" formaction="/donor/med-save" id="save" class="btn btn-primary me-3">Save</button>
+   <button type="submit" formaction="/donor/med-update" id="update" class="btn btn-primary ms-3">Update</button>
+  <button type="button" onclick="resetme();" class="btn btn-primary ms-3">Avail New Medicine</button>
+  </center>
+ </form>
+</body>
+</html>

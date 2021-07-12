@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <title>med-donor-dash</title>
+ <script>
+  $(document).ready(function () {
+    var url="/donor/getname?email="+ localStorage.getItem("email");
+    $.get(url, function (resp) {
+      if (resp.length == 0) {
+        alert("Something went wrong! Login again.")
+      }
+      else {
+        $("#user").html(resp[0].name);
+      }
+    });
+   $("#profilebtn").click(function () {
+    window.location.href = "donor-profile.html";
+   });
+   $("#availbtn").click(function () {
+    window.location.href = "med-avail.html";
+   });
+   $("#managebtn").click(function () {
+    window.location.href = "med-manager.html";
+   });
+   $("#logoutbtn").click(function () {
+      localStorage.removeItem("rid");
+      localStorage.removeItem("email");
+      window.location.href = "index.html";
+    });
+  });
+ </script>
+ <style>
+  body{
+    background-image: linear-gradient(90deg, #E8DBFC 10%, #F8F9D2 100%);
+  }
+ </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+          width="30" height="24">
+        Medissist
+      </a><font style="font-weight: normal; font-size: medium; margin-left: -290px;">Donor Dashboard</font>
+        <ul class="navbar-nav" style="margin-left: 800px;">
+          Welcome &nbsp; <span id="user">&nbsp;</span>
+        </ul>
+    </div>
+  </nav>
+<div class="card-group" style="margin: 10px 200px 0px 200px;">
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="./pics/profilepic.jfif" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+   <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="profilebtn">Profile</button>
+  </div>
+ </div>
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="https://tse2.mm.bing.net/th?id=OIP.yMjDMwqp0BXSPgOPTYhgPAAAAA&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+    <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="availbtn">Avail Medicine</button>
+  </div>
+ </div>
+ <div class="card text-center mx-3" style="width: 14rem;">
+  <img src="https://tse4.explicit.bing.net/th?id=OIP.MI_I42q2Me_Fxzc7E7u-ZQHaHa&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+   <!-- <h5 class="card-title">Profile</h5>
+     <p class="card-text">Update your profile.</p> -->
+   <button type="button" class="btn btn-primary" id="managebtn">Medicine Manager</button>
+  </div>
+ </div>
+<div class="card text-center mx-3" style="width: 14rem;">
+  <img src="https://tse3.mm.bing.net/th?id=OIP.dcA2P0VJ8_H61WqmNKzwVQHaHa&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
+  <div class="card-body">
+    <!-- <h5 class="card-title">Profile</h5>
+      <p class="card-text">Update your profile.</p> -->
+    <button type="button" class="btn btn-primary" id="logoutbtn">Logout</button>
+  </div>
+</div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery-1.8.2.min.js"></script>
+  <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/09ad113743.js" crossorigin="anonymous"></script>
+  <title>Index Page</title>
+  <script>
+    $(document).ready(function () {
+      $("#signup_nav").click(function () {
+        $(this).addClass("active");
+        $("#signupmodal").modal("show");
+      });
+      $("#closes").click(function () {
+        $("#signup_nav").removeClass("active");
+      });
+      $("#login_nav").click(function () {
+        $(this).addClass("active");
+        $("#passerrl").hide();
+        $("#loginmodal").modal("show");
+      });
+      $("#closel").click(function () {
+        $("#login_nav").removeClass("active");
+      });
+      $("#email").blur(function () {
+        var reg = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+        var user = $(this).val();
+        if (reg.test(user)) {
+          $("#emailerr").html("Ok!").css("color", "green");
+          $("#email").addClass("is-valid").removeClass("is-invalid");
+          var url = "/ajax-check-user?email=" + user;
+          $.get(url, function (resp) {
+            if (resp.length == 0) {
+            }
+            else {
+              $("#emailerr").html("This Email is already in use!").css("color", "red");
+              $("#email").removeClass("is-valid").addClass("is-invalid");
+            }
+          });
+        }
+        else {
+          $("#emailerr").html("Invalid e-mail id!").css("color", "red");
+          $("#email").removeClass("is-valid").addClass("is-invalid");
+        }
+      });
+      $("#password").keyup(function () {
+        var reg = /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+        var pwd = $(this).val();
+        if (reg.test(pwd)) {
+          $("#passerr").html("Ok!").css("font-size", "16px").css("color", "green");
+          $("#password").addClass("is-valid").removeClass("is-invalid");
+        }
+        else {
+          $("#passerr").css("font-size", "10px").html("Must contain 8 characters including lower and uppercase letters, numbers, and special characters!").css("color", "red");
+          $("#password").removeClass("is-valid").addClass("is-invalid");
+        }
+      });
+      $("#mobile").blur(function () {
+        var reg = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+        var mnr = $(this).val();
+        if (reg.test(mnr)) {
+          $("#mobileerr").html("Ok!").css("color", "green");
+          $("#mobile").addClass("is-valid").removeClass("is-invalid");
+        }
+        else {
+          $("#mobileerr").html("Invalid Mobile Number!").css("color", "red");
+          $("#mobile").removeClass("is-valid").addClass("is-invalid");
+        }
+      });
+      $("#signup").click(function () {
+        if ($("#emailerr").html() == "Ok!" && $("#passerr").html() == "Ok!" && $("#mobileerr").html() == "Ok!" && ($("#utype").val() == "donor" || $("#utype").val() == "recipient")) {
+          //  alert();
+          var user = $("#email").val();
+          var pass = $("#password").val();
+          var mob = $("#mobile").val();
+          var utype = $("#utype").val();
+          var url = "/ajax-signup-user?email=" + user + "&password=" + pass + "&mobile=" + mob + "&utype=" + utype;
+          $.get(url, function (resp) {
+            
+          });
+          $("#suerr").html("Saved").css("color", "green");
+          $("#signup_nav").removeClass("active");
+          $("#signupmodal").modal("hide");
+          $("#loginmodal").modal("show");
+        }
+      });
+      $("#emaillogin").blur(function () {
+        var reg = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+        var user = $(this).val();
+        if (reg.test(user)) {
+          $("#emailerrl").html("Ok!").css("color", "green");
+          $("#emaillogin").addClass("is-valid").removeClass("is-invalid");
+          $("#login").prop("disabled", false);
+          var url = "/ajax-check-user?email=" + user;
+          $.get(url, function (resp) {
+            if (resp.length == 0) {
+              $("#emailerrl").html("Invalid User Id!").css("color", "red");
+              $("#emaillogin").removeClass("is-valid").addClass("is-invalid");
+              alert("SignUp");
+              $("#login").prop("disabled",true);
+            }
+          });
+        }
+        else {
+          $("#emailerrl").html("Invalid e-mail id!").css("color", "red");
+          $("#emaillogin").removeClass("is-valid").addClass("is-invalid");
+        }
+      });
+      $("#login").click(function () {
+        var user = $("#emaillogin").val();
+        var pass = $("#passwordlogin").val();
+        var url = "/ajax-login-user?email=" + user + "&password=" + pass;
+        //alert(url);
+        $.get(url, function (resp) {
+          if (resp.length == 0) {
+            $("#passwordlogin").removeClass("is-valid").addClass("is-invalid");
+            alert("Invalid EmailId and Password");
+            $("#passerrl").show();
+          }
+          else {
+            //alert("Hello");
+            //alert(resp[0].utype);
+            localStorage.setItem("email",user);
+            if (resp[0].utype == "donor") {
+              window.location.href = "med-donor-dash.html";
+            }
+            if (resp[0].utype == "recipient") {
+              window.location.href = "med-recipient-dash.html";
+            }
+          }
+        });
+      });
+      $("#comment").click(function(){
+        $("#box").fadeToggle(500);
+      });
+      $("#passerrl").click(function(){
+        var user = $("#emaillogin").val();
+        var url = "/forgot?email="+user;
+        $.get(url,function(resp){
+          if(resp.length==0){
+            alert("Signup again!");
+          }
+          else{
+            alert("Check your email for password");
+            window.location.href="index.html";
+          }
+        });
+      });
+    });
+  </script>
+  <style>
+    body{
+      background-image: linear-gradient(135deg, #E3FDF5 10%, #FFE6FA 100%);;
+    }
+    #ig {
+      height: 20px;
+      width: 20px;
+      border-radius: 20%;
+      }
+    #ig:hover {
+      transform: scale(1.2);
+    }
+    .navbar-brand{
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 30px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #b19b9b;
+    }
+    #comment{
+      border-radius: 50%;
+      background-color: #8FB797;
+      cursor: pointer;
+      height: 50px;
+      width: 50px;
+      bottom: 10px;
+      right: 10px;
+      position:fixed;
+      box-shadow: 1px 1px 10px #b19b9b;
+    }
+    #pptc:hover{
+      opacity: 0.7;
+    }
+    .card:hover{
+      transform: scale(1.02);
+    }
+    #pic:hover{
+      transform: scale(1.1);
+    }
+    #box{
+      height: 370px;
+      width: 300px;
+      right: 10px;
+      bottom: 70px;
+      position: fixed;
+      border-radius: 5%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0px 0px 8px 0px gray;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+          width="30" height="24">
+        Medissist
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#service">Our Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#about">Our Team</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#reach">Reach Us</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav" style="margin-left: 840px;">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" id="signup_nav" href="#">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" id="login_nav" href="#">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true"
+        aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img
+          src="./pics/c1.jpg"
+          class="d-block w-100" alt="..." height="600px">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Donate Un-used Medicines.</h5>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img
+          src="./pics/c2.jpg"
+          class="d-block w-100" alt="..." height="600px">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Help Needy Patients.</h5>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img
+          src="./pics/c3.jpg"
+          class="d-block w-100" alt="..." height="600px">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Decluttering that Adds Value.</h5>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <center>
+  <table rules="all" width="100%" cellspacing=20>
+    <tr>
+      <td>
+        <nav id="service" class="navbar navbar-light bg-light">
+          <div class="container-fluid" style="justify-content: center;">
+            <span class="navbar-brand mb-0 h1">Our Services</span>
+          </div>
+        </nav>
+        <div class="container" style="justify-content: space-evenly; ">
+          <div class="card text-center mx-5" style="width: 14rem; float: left;">
+            <img src="./pics/get.jfif" class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Provide Medicines</h5>
+              <p class="card-text">Donate the un-used medicines cluttering your house to the needy users.</p>
+            </div>
+          </div>
+          <div class="card text-center mx-5" style="width: 14rem; float: left;">
+            <img height="170" src="./pics/set.jfif" class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Get Medicines</h5>
+              <p class="card-text">Get free medicines in your city with just a click of your mouse.</p>
+            </div>
+          </div>
+          <div class="card text-center mx-5" style="width: 14rem; float: left;">
+            <img height="170"
+              src="https://tse1.mm.bing.net/th?id=OIP.GJw7ZJJyhNZyoWme_qLajAHaE7&pid=Api&P=0&w=233&h=156"
+              class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Connect</h5>
+              <p class="card-text">Build a healthy connection with users through your kind gesture.</p>
+            </div>
+          </div>
+          <div class="card text-center mx-5" style="width: 14rem; float: left;">
+            <img src="https://tse4.mm.bing.net/th?id=OIP.cptchPrts0CfJBgFY6CDpgHaFj&pid=Api&P=0&w=213&h=161" class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Non-Profitable Site</h5>
+              <p class="card-text">We help the users unable to buy expensive medicines to find donors.</p>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <nav id="about" class="navbar navbar-light bg-light">
+          <div class="container-fluid" style="justify-content: center;">
+            <span class="navbar-brand mb-0 h1">Our Team</span>
+          </div>
+        </nav>
+        <center>
+        <table rules="cols">
+          <tr>
+            <td>
+              <h4>The Developer</h4>
+              <div style="float: left;">
+                <img id="pic" style="border-radius: 50%;" height="150px" width="150px" src="uploads/IMG.jpg" alt="">
+              </div>
+              <div style="float: left; margin-left: 20px; margin-right: 50px; padding-right: 20px;">
+                <p>
+                  <b>Hargun Kaur</b> <br>
+                  Computer Science Undergraduate <br>
+                  <i>Email:</i> hargun312kaur@gmail.com <br>
+                  <i>Contact:</i> 95018-61903 <br>
+                  <i>College:</i> Thapar University, Patiala <br>
+                </p>
+              </div>
+            </td>
+            <td>
+              <h4 style="margin-left: 440px;">The Guide</h4>
+              <div style="float: right;">
+                <img id="pic" style="border-radius: 50%;" height="150px" width="150px"
+                  src="http://banglorecomputereducation.com/pics/sir.jpg" alt="">
+              </div>
+              <div style="float: right; margin-right: 20px; margin-left: 50px; padding-left: 20px;">
+                <p>
+                  <b>Rajesh K. Bansal</b> <br>
+                  (SCJP-Sun Certified Java Programmer) <br>
+                  20 Years experience in Training & Development. <br> 
+                  Founder of realJavaOnline.com <br>
+                  <i>Email:</i> bcebti@gmail.com <br> 
+                  <i>Contact:</i> 98722-46056 <br>
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+        </center>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <nav id="reach" class="navbar navbar-light bg-light">
+          <div class="container-fluid" style="justify-content: center;">
+            <span class="navbar-brand mb-0 h1">Get In Touch</span>
+          </div>
+        </nav>
+        <table rules="all" width="100%" cellspacing=20 >
+          <tr>
+            <td style="width: 77%;"><iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3443.212782261944!2d76.3910313150767!3d30.34490208177406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391028969e18b795%3A0xec40e60bf38675c!2sCharan%20Bagh%20Park%2C%20Charan%20Bagh%2C%20Patiala%2C%20Punjab%20147001!5e0!3m2!1sen!2sin!4v1625043886523!5m2!1sen!2sin"
+              width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe></td>
+            <td><iframe
+              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMedissist-101372358882050&tabs=timeline&width=330&height=200&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+              width="330" height="200" style="border:none;overflow:hidden; margin-right:10px; padding-top: 4px; float: right;" scrolling="no" frameborder="0" allowfullscreen="true"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </td>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div>Copyright <i class="far fa-copyright"></i> 2021 Hargun Kaur- All rights reserved.</div>
+        <center>
+          <a class="mx-2" href="https://www.instagram.com/hargun.kaur.03/"><img id="ig" src="./pics/ig logo.jpg"
+              alt="ig"></a>
+          <a class="mx-2" href="https://www.facebook.com/profile.php?id=100059442881473"><img id="ig"
+              src="./pics/facebook-logo.png" alt="facebook"></a>
+          <br>
+          <a id="pptc" href="#" style="color: rgb(78, 78, 78); text-decoration: none; font-weight: bold;"> Privacy Policy </a> <i style="color: rgb(78, 78, 78);" class="fas fa-circle"></i> <a id="pptc" style="color: rgb(78, 78, 78);text-decoration: none; font-weight: bold;" href="#"> Terms of Service </a>
+        </center>
+        <div id="comment"><i style="padding: 17px;" class="fas fa-comment-alt"></i></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+  </center>
+  <div id="box">
+    <form>
+    <h5>Your Suggestions</h5>
+    <textarea name="suggestions" cols="33" rows="11"></textarea>
+    <input type="submit" value="Submit">
+    </form>
+  </div>
+  <div class="modal fade" id="signupmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="signupmodalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sign Up</h5>
+          <button type="button" id="closes" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            <div class="form-floating">
+              <input type="email" autofocus class="form-control" name="email" id="email" placeholder="name@example.com">
+              <label for="email">Email address</label>
+              <span id="emailerr">&nbsp;</span>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" name="password" id="password">
+              <label for="password">Password</label>
+              <span id="passerr">&nbsp;</span>
+            </div>
+            <div class="form-floating">
+              <input type="text" class="form-control" name="mobile" id="mobile">
+              <label for="mobile">Mobile Number</label>
+              <span id="mobileerr">&nbsp;</span>
+            </div>
+            <div>
+              <select class="form-select" id="utype" name="utype" aria-label="Default select example">
+                <option value="none">Select Type</option>
+                <option value="donor" id="donor">Medicine Donor</option>
+                <option value="recipient" id="recipient">Medicine Recipient</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="signup" class="btn btn-success">Sign Up</button>
+          <span id="suerr">&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="loginmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="loginmodalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+          <button type="button" id="closel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            <div class="form-floating">
+              <input type="email" autofocus class="form-control" name="email" id="emaillogin"
+                placeholder="name@example.com">
+              <label for="emaillogin">Email address</label>
+              <span id="emailerrl">&nbsp;</span>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" name="password" id="passwordlogin">
+              <label for="passwordlogin">Password</label>
+              <span id="passerrl"><a href="#" style="text-decoration: none;">Forgot Password?</a></span>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="login" class="btn btn-warning">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

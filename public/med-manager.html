@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/angular.min.js"></script>
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <script>
+  function loading() {
+    var em = localStorage.getItem("email");
+    document.getElementById("email").value = em;
+   }
+  var mymodule = angular.module("medModule",[]);
+  mymodule.controller("medController", function($scope,$http){
+   $scope.email;
+   $scope.redir = function(rid){
+     //alert(rid);
+     localStorage.removeItem("rid");
+     localStorage.setItem("rid",rid);
+     window.location.href="med-avail.html";
+   }
+   $scope.doDelete = function(rid){
+    $http.get("/donor/delmedicine?rid="+rid).then(goodfn,badfn);
+    function goodfn(resp){
+     //alert(resp.data);
+     $scope.fetch();
+    }
+    function badfn(resp) {
+     alert("Error Deleting the Medicine");
+    }
+   }
+   $scope.jsonArray = [{}];
+   $scope.fetch=function(){
+    $http.get("/donor/fetchmedicines?email="+ localStorage.getItem("email")).then(goodfn,badfn);
+    function goodfn(resp) {
+     $scope.jsonArray = resp.data;
+    }
+    function badfn(resp) {
+     alert("Error");
+     alert(JSON.stringify(resp.data));
+    }
+   }
+  });
+ </script>
+<style>
+  body {
+    background-color: #f0e9fa;
+  }
+  #link{
+   text-decoration: none;
+  }
+  #mybutton{
+   color: azure;
+   background-color: darkslategray;
+   float: right;
+   height: 50px;
+   width: 170px;
+   border-radius: 30px;
+   padding: 10px 10px 10px 17px;
+  }
+  #mybutton:hover{
+   color: darkslategray;
+   background-color: azure;
+  }
+</style>
+ <title>Document</title>
+</head>
+<body onload="loading();" ng-app="medModule" ng-controller="medController" ng-init="fetch();">
+  <a id="link" href="med-donor-dash.html">
+    <div id="mybutton">
+      Back to dashboard
+    </div>
+  </a>
+ <h1>Medicines</h1>
+ <hr>
+ <div class="row mb-3">
+  <label for="email" class="col-sm-2 col-form-label">Email</label>
+  <div class="col-sm-6">
+   <input readonly type="email" class="form-control" ng-model="email" ng-change="fetch();" id="email">
+  </div>
+ </div>
+ <table class="table table-dark table-bordered table-hover">
+  <tr>
+   <th>Sr.no.</th>
+   <th>Name of the medicine</th>
+   <th>Company</th>
+   <th>Expiry Date(YYYY-MM-DD)</th>
+   <th>Unit</th>
+   <th>Quantity</th>
+   <th>Picture</th>
+   <th>Action</th>
+   <th>Status</th>
+  </tr>
+  <tr ng-repeat="obj in jsonArray">
+   <td align="center">{{$index+1}}</td>
+   <td align="center">{{obj.medname}}</td>
+   <td align="center">{{obj.company}}</td>
+   <td align="center">{{obj.expdate.substring(0,10)}}</td>
+   <td align="center">{{obj.unit}}</td>
+   <td align="center">{{obj.qty}}</td>
+   <td align="center"><img src="uploads/{{obj.picname}}" width="100" height="100" alt=""></td>
+   <td align="center"><input type="button" value="Update" ng-click="redir(obj.rid);"></td>
+   <td align="center"><input type="button" value="Donated" ng-click="doDelete(obj.rid);"></td>
+  </tr>
+ </table>
+</body>
+</html>

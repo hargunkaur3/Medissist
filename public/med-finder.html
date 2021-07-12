@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/angular.min.js"></script>
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <title>med-finder</title>
+ <script>
+  var mymodule = angular.module("findModule", []);
+  mymodule.controller("findController", function ($scope, $http) {
+   $scope.hideshow=true;
+   $scope.jsonArray = [{}];
+   $scope.medArray = [{}];
+   $scope.donorArray = [{}];
+   $scope.detailArray = [{}];
+   $scope.show=function(){
+    $scope.hideshow=false;
+   }
+   $scope.fetch = function () {
+    $http.get("/recipient/fetch?").then(goodfn, badfn);
+    function goodfn(resp) {
+     $scope.jsonArray = resp.data;
+    }
+    function badfn(resp) {
+     alert("Error");
+     alert(JSON.stringify(resp.data));
+    }
+   }
+   $scope.doFun = function () {
+    $http.get("/recipient/fetchmed?city="+$scope.selCity).then(goodfn, badfn);
+    function goodfn(resp) {
+     $scope.medArray = resp.data;
+    }
+    function badfn(resp) {
+     alert("Error");
+     alert(JSON.stringify(resp.data));
+    }
+   }
+   $scope.find = function () {
+    $http.get("/recipient/findonor?city=" + $scope.selCity +"&medname=" + $scope.selMed).then(goodfn, badfn);
+    function goodfn(resp) {
+     //alert(JSON.stringify(resp.data));
+     $scope.donorArray = resp.data;
+    }
+    function badfn(resp) {
+     alert("Error");
+     alert(JSON.stringify(resp.data));
+    }
+   }
+   $scope.showDetails = function(email) {
+    $http.get("/recipient/donordetails?email="+email).then(goodfn,badfn);
+    function goodfn(resp) {
+     //alert(JSON.stringify(resp.data));
+     $scope.detailArray = resp.data;
+     // alert(detailArray);
+    }
+    function badfn(resp) {
+     alert("Error");
+     alert(JSON.stringify(resp.data));
+    }
+    $("#detailsModal").modal("show");
+   }
+  });
+ </script>
+ <style>
+  body {
+   background-color: #f7e0e0;
+  }
+  #link{
+   text-decoration: none;
+  }
+  #mybutton{
+   color: azure;
+   background-color: darkslategray;
+   float: right;
+   height: 50px;
+   width: 170px;
+   border-radius: 30px;
+   padding: 10px 10px 10px 17px;
+  }
+  #mybutton:hover{
+   color: darkslategray;
+   background-color: azure;
+  }
+ </style>
+</head>
+<body ng-app="findModule" ng-controller="findController" ng-init="fetch();">
+ <a id="link" href="med-recipient-dash.html">
+  <div id="mybutton">
+   Back to dashboard
+  </div>
+ </a>
+ <h3 class="mx-5">Find Medicine</h3>
+ <hr>
+ <center><br>
+  <div class="row mb-3">
+   <label for="city" class="col-sm-2 col-form-label">City</label>
+   <div class="col-sm-4">
+    <input type="text" id="city" ng-model="selCity" ng-blur="doFun();" class="form-control"  list="cities">
+    <datalist id="cities" >
+     <option ng-repeat="obj in jsonArray" value={{obj.city}}>
+    </datalist>
+   </div>
+  </div>
+  <br>
+  <div class="row mb-3">
+   <label for="medname" class="col-sm-2 col-form-label">Medicines</label>
+   <div class="col-sm-4">
+    <input type="text" id="medname" ng-model="selMed" class="form-control" list="medicines">
+    <datalist id="medicines">
+     <option ng-repeat="obj in medArray" value={{obj.medname}}>
+    </datalist>
+   </div>
+  </div>
+  <br>
+  <button type="button" class="btn btn-primary" ng-click="find(); show();" >Search</button>
+  <br><br>
+  <div class="container">
+   <div ng-hide="hideshow" class="row">
+    <div class="col-md-3" ng-repeat="obj in donorArray">
+     <div class="card" style="width: 18rem;">
+      <img height="250px" src="uploads/{{obj.picname}}" class="card-img-top" alt="...">
+      <div class="card-body">
+       <h5 class="card-title">{{obj.medname}}</h5>
+       <p class="card-text">
+        <i>Company</i>: {{obj.company}} <br>
+        <i>Expiry Date</i>: {{obj.expdate.substring(0,10)}} <br>
+        <i>Unit</i>: {{obj.unit}} <br>
+        <i>Quantity Available</i>: {{obj.qty}}
+       </p>
+       <button type="button" class="btn btn-primary" ng-click="showDetails(obj.email)" >Donor Details</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </center>
+ <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content" ng-repeat="obj in detailArray">
+    <div class="modal-header">
+     <h5 class="modal-title" id="detailsModalLabel">{{obj.name}}</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+     <center><img height="100px" width="100px" src="uploads/{{obj.picname}}" alt="..."></center>
+     <i>Email</i>: <a href="mailto:{{obj.email}}">{{obj.email}}</a> <br>
+     <i>Contact number</i>: <a href="tel:{{obj.contact}}">{{obj.contact}}</a> <br>
+     <i>Address</i>: {{obj.address}} <br>
+     <i>City</i>: {{obj.city}}
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+   </div>
+  </div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="css/bootstrap.min.css">
+ <script src="js/jquery-1.8.2.min.js"></script>
+ <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+ <title>Profile</title>
+ <script>
+  $(document).ready(function(){
+   function loading() {
+    var em = localStorage.getItem("email");
+    document.getElementById("email").value = em;
+   }
+   loading();
+   function load(){
+    var user = $("#email").val();
+    var url = "/recipient/check-reci?email=" + user;
+    $.get(url, function (resp) {
+     if (resp.length == 0) {
+      //alert("Fill details");
+      $("#save").attr("formaction", "/recipient/details");
+     }
+     else {
+      //alert(JSON.stringify(resp));
+      $("#name").val(resp[0].name);
+      $("#address").val(resp[0].address);
+      $("#city").val(resp[0].city);
+      $("#acard").val(resp[0].acard);
+      $("#save").attr("formaction","/recipient/update-details");
+     }
+    });
+   }
+   load();
+  });
+ </script>
+ <style>
+  body {
+   background-color: #f7e0e0;
+  }
+ </style>
+</head>
+
+<body>
+ <h3 class="mx-5">My Details</h3>
+ <hr>
+ <form class="mx-5" method="POST" enctype="multipart/form-data">
+  <div class="row mb-3">
+   <label for="email" class="col-sm-2 col-form-label">Email</label>
+   <div class="col-sm-10">
+    <input readonly type="email" class="form-control" name="email" id="email">
+   </div>
+  </div>
+  <div class="row mb-3">
+   <label for="name" class="col-sm-2 col-form-label">Name</label>
+   <div class="col-sm-10">
+    <input type="text" class="form-control" name="name" id="name">
+   </div>
+  </div>
+  <div class="row mb-3">
+   <label for="address" class="col-sm-2 col-form-label">Address</label>
+   <div class="col-sm-10">
+    <input type="text" class="form-control" name="address" id="address">
+   </div>
+  </div>
+  <div class="row mb-3">
+   <label for="city" class="col-sm-2 col-form-label">City</label>
+   <div class="col-sm-10">
+    <input type="text" name="city" class="form-control" id="city">
+   </div>
+  </div>
+  <div class="row mb-3">
+   <label for="acard" class="col-sm-2 col-form-label">Adhaar Card No.</label>
+   <div class="col-sm-10">
+    <input type="text" name="acard" class="form-control" id="acard">
+   </div>
+  </div>
+  <center><button type="submit" formaction="" id="save" class="btn btn-primary me-3">Save</button>
+  </center>
+ </form>
+</body>
+
+</html>
