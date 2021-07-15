@@ -28,7 +28,8 @@ dbcon.connect(function (err) {
 });
 app.use(express.static("public"));
 app.post(express.urlencoded({extended:true}));
-app.listen(5000, function () {
+const port=process.env.PORT||5000;
+app.listen(port, function () {
  console.log("Server Started");
 });
 
