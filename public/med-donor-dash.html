@@ -40,55 +40,76 @@
   body{
     background-image: linear-gradient(90deg, #E8DBFC 10%, #F8F9D2 100%);
   }
+  .navbar-user{
+      height: inherit;
+  }
+  .card-property{
+    text-decoration: none;
+      text-underline: none;
+  }
+  .card:hover{
+      color:gray;
+      transform: scale(1.12);
+  }
  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">
-        <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
-          width="30" height="24">
-        Medissist
-      </a><font style="font-weight: normal; font-size: medium; margin-left: -290px;">Donor Dashboard</font>
-        <ul class="navbar-nav" style="margin-left: 800px;">
-          Welcome &nbsp; <span id="user">&nbsp;</span>
-        </ul>
+
+<nav class="navbar-user bg-dark">
+    <div class="row">
+        <div class="col mt-3">
+            <a class="navbar-brand text-white" href="index.html">
+                <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+                     width="40" height="35" class="d-inline-block align-text-top ">
+                Medissist
+            </a>
+        </div>
+        <div class="col mt-3 text-center text-white"><font style="font-weight: 800; font-size: x-large;">Donor
+            Dashboard</font></div>
+        <div class="col mt-3 text-end"><span class="navbar-text text-white text-end">
+            Welcome &nbsp; <span id="user">&nbsp;</span>
+          </span>
+        </div>
     </div>
-  </nav>
-<div class="card-group" style="margin: 10px 200px 0px 200px;">
- <div class="card text-center mx-3" style="width: 14rem;">
-  <img src="./pics/profilepic.jfif" class="card-img-top p-1 rounded" alt="...">
-  <div class="card-body">
-   <!-- <h5 class="card-title">Profile</h5>
-   <p class="card-text">Update your profile.</p> -->
-   <button type="button" class="btn btn-primary" id="profilebtn">Profile</button>
-  </div>
- </div>
- <div class="card text-center mx-3" style="width: 14rem;">
-  <img src="https://tse2.mm.bing.net/th?id=OIP.yMjDMwqp0BXSPgOPTYhgPAAAAA&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
-  <div class="card-body">
-   <!-- <h5 class="card-title">Profile</h5>
-    <p class="card-text">Update your profile.</p> -->
-   <button type="button" class="btn btn-primary" id="availbtn">Avail Medicine</button>
-  </div>
- </div>
- <div class="card text-center mx-3" style="width: 14rem;">
-  <img src="https://tse4.explicit.bing.net/th?id=OIP.MI_I42q2Me_Fxzc7E7u-ZQHaHa&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
-  <div class="card-body">
-   <!-- <h5 class="card-title">Profile</h5>
-     <p class="card-text">Update your profile.</p> -->
-   <button type="button" class="btn btn-primary" id="managebtn">Medicine Manager</button>
-  </div>
- </div>
-<div class="card text-center mx-3" style="width: 14rem;">
-  <img src="https://tse3.mm.bing.net/th?id=OIP.dcA2P0VJ8_H61WqmNKzwVQHaHa&pid=Api&P=0&w=300&h=300" class="card-img-top p-1 rounded" alt="...">
-  <div class="card-body">
-    <!-- <h5 class="card-title">Profile</h5>
-      <p class="card-text">Update your profile.</p> -->
-    <button type="button" class="btn btn-primary" id="logoutbtn">Logout</button>
-  </div>
-</div>
+</nav>
+<div class="d-flex flex-wrap justify-content-center m-5" >
+    <a href="donor-profile.html" class="text-decoration-none">
+        <div class="card text-center mx-3" style="width: 14rem; border-radius: 5%">
+            <img src="./pics/profile.jpg" class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body card-property text-decoration-none">
+                <h5 class="card-title">Manage profile</h5>
+            </div>
+        </div>
+    </a>
+    <a href="med-avail.html" class="text-decoration-none">
+        <div class="card text-center mx-3" style="width: 14rem; border-radius: 5%">
+            <img src="https://tse2.mm.bing.net/th?id=OIP.yMjDMwqp0BXSPgOPTYhgPAAAAA&pid=Api&P=0&w=300&h=300"
+                 class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Avail Medicine</h5>
+            </div>
+        </div>
+    </a>
+    <a href="med-manager.html" class="text-decoration-none">
+        <div class="card text-center mx-3" style="width: 14rem;border-radius: 5%">
+            <img src="https://tse4.explicit.bing.net/th?id=OIP.MI_I42q2Me_Fxzc7E7u-ZQHaHa&pid=Api&P=0&w=300&h=300"
+                 class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Medicine Manager</h5>
+            </div>
+        </div>
+    </a>
+    <a id="logoutbtn" class="text-decoration-none">
+        <div class="card text-center mx-3" style="width: 14rem;border-radius: 5%">
+            <img src="https://tse3.mm.bing.net/th?id=OIP.dcA2P0VJ8_H61WqmNKzwVQHaHa&pid=Api&P=0&w=300&h=300"
+                 class="card-img-top p-1 rounded" alt="...">
+            <div class="card-body">
+                 <h5 class="card-title">Logout</h5>
+    <!--            <button type="button" class="btn btn-primary" id="logoutbtn">Logout</button>-->
+            </div>
+        </div>
+    </a>
 </div>
 </body>
 

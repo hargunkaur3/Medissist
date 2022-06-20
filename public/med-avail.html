@@ -40,6 +40,7 @@
       }
       else {
         //alert(JSON.stringify(resp));
+       document.getElementById('user').innerText=resp[0].name;
         $("#city").val(resp[0].city);
       }
     });
@@ -93,33 +94,49 @@
  </script>
 </head>
 <body onload="loading();">
+<nav class="navbar-user bg-dark">
+ <div class="row">
+  <div class="col mt-3">
+   <a class="navbar-brand text-white" href="index.html">
+    <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+         width="40" height="35" class="d-inline-block align-text-top ">
+    Medissist
+   </a>
+  </div>
+  <div class="col mt-3 text-center text-white"><font style="font-weight: 800; font-size: x-large;">Avail Medicine</font></div>
+  <div class="col mt-3 text-end"><span class="navbar-text text-white text-end">
+            Welcome &nbsp; <span id="user">&nbsp;</span>
+          </span>
+  </div>
+ </div>
+</nav>
   <a id="link" href="med-donor-dash.html">
     <div id="mybutton">
       Back to dashboard
     </div>
   </a>
- <h1>Avail Medicine</h1><hr>
- <form class="mx-5" method="POST" enctype="multipart/form-data">
+<!-- <h1>Avail Medicine</h1><hr>-->
+ <form class="mx-5 m-5" method="POST" enctype="multipart/form-data">
   <div class="row mb-3 g-3">
-   <label for="email" class="col-sm-2 col-form-label">Email</label>
+   <label for="email" class="col-sm-2 col-form-label"><b>Email</b></label>
    <div class="col-sm-10">
     <input readonly type="email" class="form-control" name="email" id="email">
    </div>
   </div>
   <div class="row mb-3 g-3">
-    <label for="city" class="col-sm-2 col-form-label">City</label>
+    <label for="city" class="col-sm-2 col-form-label"><b>City</b></label>
     <div class="col-sm-10">
       <input type="text" class="form-control" name="city" id="city">
     </div>
   </div>
   <div class="col-md-5 mx-4" >
-   <label for="medname" class="form-label">Medicine Name</label>
+   <label for="medname" class="form-label"><b>Medicine Name</b></label>
    <input type="text" class="form-control" id="medname" name="medname">
   </div>
   <input type="text" hidden name="rid" id="rid">
   <input type="text" hidden name="picture" id="picture">
   <div class="col-md-5 mx-4" >
-   <label for="company" class="form-label">Company</label>
+   <label for="company" class="form-label"><b>Company</b></label>
    <input type="text" class="form-control" id="company" name="company">
   </div>
   <div class="col-md-5 mx-4" >
@@ -127,7 +144,7 @@
    <input type="date" class="form-control" id="expdate" name="expdate">
   </div>
   <div class="col-md-5 mx-4" >
-   <label for="unit" class="form-label">Form of the medicine</label>
+   <label for="unit" class="form-label"><b>Form of the medicine</b></label>
    <select class="form-select" id="unit" name="unit" aria-label="Default select example">
     <option value="none">Select</option>
     <option value="tablet">Tablet</option>

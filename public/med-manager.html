@@ -69,6 +69,20 @@
  <title>Document</title>
 </head>
 <body onload="loading();" ng-app="medModule" ng-controller="medController" ng-init="fetch();">
+<nav class="navbar-user bg-dark">
+ <div class="row">
+  <div class="col mt-3">
+   <a class="navbar-brand text-white" href="index.html">
+    <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+         width="40" height="35" class="d-inline-block align-text-top ">
+    Medissist
+   </a>
+  </div>
+  <div class="col mt-3 text-center text-white"><font style="font-weight: 800; font-size: x-large;">Manage Profile</font></div>
+  <div class="col mt-3 text-end">
+  </div>
+ </div>
+</nav>
   <a id="link" href="med-donor-dash.html">
     <div id="mybutton">
       Back to dashboard
@@ -77,7 +91,7 @@
  <h1>Medicines</h1>
  <hr>
  <div class="row mb-3">
-  <label for="email" class="col-sm-2 col-form-label">Email</label>
+  <label for="email" class="col-sm-2 col-form-label"><b>Email</b></label>
   <div class="col-sm-6">
    <input readonly type="email" class="form-control" ng-model="email" ng-change="fetch();" id="email">
   </div>

@@ -47,7 +47,9 @@
           $("#save").attr("formaction", "/donor/profile");
         }
         else {
+         document.getElementById('user').innerText=resp[0].name;
           //alert(JSON.stringify(resp));
+          $("#user").val(resp[0].name);
           $("#name").val(resp[0].name);
           $("#contact").val(resp[0].contact)
           $("#address").val(resp[0].address);
@@ -63,12 +65,28 @@
 </head>
 
 <body onload="loading(); load();">
+<nav class="navbar-user bg-dark">
+ <div class="row">
+  <div class="col mt-3">
+   <a class="navbar-brand text-white" href="index.html">
+    <img src="https://image.freepik.com/free-vector/colorful-letter-m-logo-design-mark_111165-89.jpg" alt=""
+         width="40" height="35" class="d-inline-block align-text-top ">
+    Medissist
+   </a>
+  </div>
+  <div class="col mt-3 text-center text-white"><font style="font-weight: 800; font-size: x-large;">Manage Profile</font></div>
+  <div class="col mt-3 text-end"><span class="navbar-text text-white text-end">
+            Welcome &nbsp; <span id="user">&nbsp;</span>
+          </span>
+  </div>
+ </div>
+</nav>
   <a id="link" href="med-donor-dash.html">
     <div id="mybutton">
       Back to dashboard
     </div>
   </a>
- <img class="mx-5" src="" alt="" height="130px" width="130px" id="shw">
+ <img class="mx-5" src="" alt="" height="130px" width="130px" id="shw" style="border-radius: 8%">
  <br><br>
  <h3 class="mx-5">My Profile</h3>
  <hr>
@@ -89,7 +107,7 @@
    <div class="row mb-3">
     <label for="name" class="col-sm-2 col-form-label">Name</label>
     <div class="col-sm-10">
-     <input type="text" class="form-control" name="name" id="name">
+     <input type="text" class="form-control name" name="name"  id="name">
     </div>
    </div>
   <div class="row mb-3">
